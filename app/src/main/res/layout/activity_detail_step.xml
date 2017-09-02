@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="com.rkndika.udacitybakingapp.DetailStepActivity">
+
+    <LinearLayout
+        android:id="@+id/container_step_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/container_media_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/sep_step_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_no_media_display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no_media_message"
+                android:gravity="center"
+                android:layout_margin="20dp"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/description_title"
+            android:textAllCaps="true"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/tv_step_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

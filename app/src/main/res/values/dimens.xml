@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="recipe_item_cardview">10dp</dimen>
+    <dimen name="recipe_item_title_size">17sp</dimen>
+    <dimen name="recipe_item_title_margin">25dp</dimen>
+    <dimen name="recipe_item_image_height">200dp</dimen>
+    <dimen name="sidebar_width">400dp</dimen>
+    <dimen name="ingredient_card_padding">20dp</dimen>
+    <dimen name="recipe_content_margin">10dp</dimen>
+    <dimen name="ingredient_card_radius">5dp</dimen>
+    <dimen name="recipe_title_size">20sp</dimen>
+    <dimen name="recipe_menu_cardview">15dp</dimen>
+    <dimen name="recipe_item_step_cardview">5dp</dimen>
+
+    <dimen name="widget_margin">8dp</dimen>
+</resources>

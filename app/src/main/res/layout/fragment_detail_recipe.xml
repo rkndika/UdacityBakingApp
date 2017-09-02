@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <TextView
+                android:id="@+id/tv_menu_ingredient"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:layout_weight="0.5"
+                android:text="@string/ingredient_title"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:textAllCaps="true"/>
+            <TextView
+                android:id="@+id/tv_menu_steps"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:layout_weight="0.5"
+                android:text="@string/step_title"
+                android:gravity="center"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_ingredient_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/recipe_content_margin"
+            app:cardBackgroundColor="@color/colorWetAsphalt"
+            app:contentPadding="@dimen/ingredient_card_padding"
+            app:cardCornerRadius="@dimen/ingredient_card_radius"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ingredient_title"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/recipe_title_size"
+                    android:textColor="@color/colorWhite"/>
+
+                <ListView
+                    android:id="@+id/lv_ingredient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:dividerHeight="0dp"
+                    android:layout_marginTop="20dp"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_steps_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
+
+
+</LinearLayout>

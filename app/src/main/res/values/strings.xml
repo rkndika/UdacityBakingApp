@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Baking App</string>
+
+    <!-- message -->
+    <string name="error_message">
+        An error has occurred. Please try again!
+    </string>
+    <string name="error_no_internet_message">
+        Internet connection not available. Please check your internet connection!
+    </string>
+    <string name="no_data_message">No Data</string>
+
+    <string name="ingredient_title">Ingredient</string>
+    <string name="step_title">Steps</string>
+    <string name="description_title">Description</string>
+    <string name="no_media_message">There is no media to display</string>
+    <string name="add_to_widget">Add To Widget</string>
+    <string name="delete_from_widget">Delete From Widget</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_title">INGREDIENT</string>
+    <string name="widget_empty">EMPTY</string>
+</resources>
