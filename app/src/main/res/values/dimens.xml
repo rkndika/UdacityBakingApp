@@ -13,4 +13,5 @@
     <dimen name="recipe_item_step_cardview">5dp</dimen>
 
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="step_item_image_height">200dp</dimen>
 </resources>

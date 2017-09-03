@@ -13,12 +13,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
@@ -29,7 +27,6 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
@@ -55,6 +52,7 @@ import com.rkndika.udacitybakingapp.model.Step;
 
 public class DetailStepActivity extends AppCompatActivity implements VideoRendererEventListener {
     private static final String TAG = "DetailStepActivity";
+    private static final String SELECTED_POSITION = "exoplayerPosition";
     private Step step;
 
     private SimpleExoPlayerView exoPlayerView;
@@ -64,6 +62,7 @@ public class DetailStepActivity extends AppCompatActivity implements VideoRender
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private DataSource.Factory mediaDataSourceFactory;
     private Handler mainHandler;
+    private long position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +73,11 @@ public class DetailStepActivity extends AppCompatActivity implements VideoRender
         }
 
         setContentView(R.layout.activity_detail_step);
+
+        position = C.TIME_UNSET;
+        if (savedInstanceState != null) {
+            position = savedInstanceState.getLong(SELECTED_POSITION, C.TIME_UNSET);
+        }
 
         Bundle extras = getIntent().getExtras();
         if(extras != null && extras.containsKey(DetailActivity.PUT_EXTRA_STEP)){
@@ -92,17 +96,18 @@ public class DetailStepActivity extends AppCompatActivity implements VideoRender
         TextView mDesc = (TextView) findViewById(R.id.tv_step_description);
         mDesc.setText(step.getDescription());
 
+
+
+        //setMediaPlayer();
+    }
+
+    private void setMediaPlayer(){
         if(step.getVideoURL().isEmpty()){
             showMedia(false);
             return;
         }
-
         showMedia(true);
 
-        setMediaPlayer();
-    }
-
-    private void setMediaPlayer(){
         mediaDataSourceFactory = buildDataSourceFactory(true);
         mainHandler = new Handler();
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -123,9 +128,11 @@ public class DetailStepActivity extends AppCompatActivity implements VideoRender
         // Default Media Source
         MediaSource mediaSource = buildMediaSource(uri, "mp4");
 
+        if (position != C.TIME_UNSET) player.seekTo(position);
+
         player.prepare(mediaSource);
 
-        // player.setPlayWhenReady(true);
+        //player.setPlayWhenReady(true);
 
         player.addListener(new Player.EventListener() {
             @Override public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -254,10 +261,27 @@ public class DetailStepActivity extends AppCompatActivity implements VideoRender
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(player != null){
-            player.release();
+    protected void onResume() {
+        super.onResume();
+        if(step != null){
+            setMediaPlayer();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (player != null) {
+            position = player.getCurrentPosition();
+            player.stop();
+            player.release();
+            player = null;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putLong(SELECTED_POSITION, position);
+        super.onSaveInstanceState(outState);
     }
 }

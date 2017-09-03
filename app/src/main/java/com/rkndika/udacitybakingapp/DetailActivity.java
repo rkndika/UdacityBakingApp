@@ -54,6 +54,7 @@ import com.rkndika.udacitybakingapp.util.WidgetSharedPreference;
 import com.rkndika.udacitybakingapp.widget.BakingAppWidgetProvider;
 
 public class DetailActivity extends AppCompatActivity implements StepAdapter.OnStepClickListener {
+    private static final String SELECTED_POSITION = "exoplayerPosition";
     public final static String PUT_EXTRA_STEP = "putExtraStep";
     private final static String TYPE_PANE_STATE = "typePaneState";
     private final static String STEP_PLAY_STATE = "stepPlayState";
@@ -71,6 +72,7 @@ public class DetailActivity extends AppCompatActivity implements StepAdapter.OnS
     private Handler mainHandler;
 
     private WidgetSharedPreference wPref;
+    private long position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class DetailActivity extends AppCompatActivity implements StepAdapter.OnS
         setContentView(R.layout.activity_detail);
 
         wPref = new WidgetSharedPreference(this);
+        position = C.TIME_UNSET;
 
         Bundle extras = getIntent().getExtras();
         if(extras != null && extras.containsKey(MainActivity.PUT_EXTRA_RECIPE)){
@@ -93,6 +96,7 @@ public class DetailActivity extends AppCompatActivity implements StepAdapter.OnS
 
         if(findViewById(R.id.recipe_step_linear_layout) != null) {
             if(savedInstanceState != null){
+                position = savedInstanceState.getLong(SELECTED_POSITION, C.TIME_UNSET);
                 mTwoPane = savedInstanceState.getBoolean(TYPE_PANE_STATE);
                 stepPlay = savedInstanceState.getParcelable(STEP_PLAY_STATE);
                 setRightPanel(stepPlay);
@@ -144,9 +148,11 @@ public class DetailActivity extends AppCompatActivity implements StepAdapter.OnS
         // Default Media Source
         MediaSource mediaSource = buildMediaSource(uri, "mp4");
 
+        if (position != C.TIME_UNSET) player.seekTo(position);
+
         player.prepare(mediaSource);
 
-        // player.setPlayWhenReady(true);
+        player.setPlayWhenReady(true);
 
         player.addListener(new Player.EventListener() {
             @Override public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -200,6 +206,7 @@ public class DetailActivity extends AppCompatActivity implements StepAdapter.OnS
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(TYPE_PANE_STATE, mTwoPane);
         outState.putParcelable(STEP_PLAY_STATE, stepPlay);
+        outState.putLong(SELECTED_POSITION, position);
 
         super.onSaveInstanceState(outState);
     }
@@ -325,10 +332,21 @@ public class DetailActivity extends AppCompatActivity implements StepAdapter.OnS
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(player != null){
+    protected void onResume() {
+        super.onResume();
+        if(stepPlay != null){
+            setRightPanel(stepPlay);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (player != null) {
+            position = player.getCurrentPosition();
+            player.stop();
             player.release();
+            player = null;
         }
     }
 }

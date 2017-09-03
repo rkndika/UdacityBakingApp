@@ -102,7 +102,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
     private void showPreviousView(Bundle savedInstanceState){
         // get data from previous data
-        List<Recipe> recipesList = savedInstanceState.getParcelableArrayList(STATE_RECYCLERVIEW_DATA);
+        List<Recipe> recipesList = null;
+        if(savedInstanceState.containsKey(STATE_RECYCLERVIEW_DATA)){
+            recipesList = savedInstanceState.getParcelableArrayList(STATE_RECYCLERVIEW_DATA);
+        }
 
         // if no data get from state
         if(recipesList == null){
@@ -228,8 +231,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         savedInstanceState.putParcelable(STATE_RECYCLERVIEW_LIST, listState);
 
         // save state adapter data
-        savedInstanceState.putParcelableArrayList(STATE_RECYCLERVIEW_DATA,
-                new ArrayList<>(mRecipeAdapter.getRecipesData()));
+        if(mRecipeAdapter.getRecipesData() != null){
+            savedInstanceState.putParcelableArrayList(STATE_RECYCLERVIEW_DATA,
+                    new ArrayList<>(mRecipeAdapter.getRecipesData()));
+        }
 
         super.onSaveInstanceState(savedInstanceState);
     }

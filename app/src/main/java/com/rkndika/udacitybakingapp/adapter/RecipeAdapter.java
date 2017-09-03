@@ -1,9 +1,6 @@
 package com.rkndika.udacitybakingapp.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +10,14 @@ import android.widget.TextView;
 
 import com.rkndika.udacitybakingapp.R;
 import com.rkndika.udacitybakingapp.model.Recipe;
-import com.rkndika.udacitybakingapp.model.Step;
+import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdapterViewHolder> {
 
     private List<Recipe> recipes;
+    private Context context;
 
     private final RecipeAdapterOnClickHandler mClickHandler;
 
@@ -53,7 +50,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     @Override
     public RecipeAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        Context context = viewGroup.getContext();
+        context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.item_recipe;
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -66,47 +63,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
         Recipe recipe = recipes.get(position);
         recipeAdapterViewHolder.mRecipeTextView.setText(recipe.getName());
 
-        Step thumbnailStep = recipe.getSteps().get(recipe.getSteps().size()-1);
-        if(thumbnailStep.getVideoURL().isEmpty()){
-            recipeAdapterViewHolder.mRecipeImageView.setImageResource(R.drawable.rec_grey);
+        if(recipe.getImage().isEmpty()){
+            recipeAdapterViewHolder.mRecipeImageView.setImageResource(R.drawable.no_thumbnail);
         }
         else {
-            new ThumbnailFromVideo()
-                    .execute(new Container(recipeAdapterViewHolder, thumbnailStep.getVideoURL()));
+            Picasso.with(context)
+                    .load(recipe.getImage())
+                    .placeholder(R.drawable.rec_grey)
+                    .error(R.drawable.no_thumbnail)
+                    .into(recipeAdapterViewHolder.mRecipeImageView);
         }
-    }
-
-    class Container{
-        RecipeAdapterViewHolder viewHolder;
-        String videoUrl;
-        Bitmap thumbnail;
-        Container(RecipeAdapterViewHolder viewHolder, String videoUrl){
-            this.viewHolder = viewHolder;
-            this.videoUrl = videoUrl;
-        }
-    }
-
-    private class ThumbnailFromVideo extends AsyncTask<Container, Void, Container> {
-
-        @Override
-        protected Container doInBackground(Container... params) {
-            Container container = params[0];
-            MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-            mediaMetadataRetriever .setDataSource(container.videoUrl, new HashMap<String, String>());
-            container.thumbnail = mediaMetadataRetriever.getFrameAtTime(1000); //unit in microsecond
-            return container;
-        }
-
-        @Override
-        protected void onPostExecute(Container result) {
-            result.viewHolder.mRecipeImageView.setImageBitmap(result.thumbnail);
-        }
-
-        @Override
-        protected void onPreExecute() {}
-
-        @Override
-        protected void onProgressUpdate(Void... values) {}
     }
 
     @Override
